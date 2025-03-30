@@ -53,3 +53,4 @@ spring-boot-starter/target/
 .Trashes
 ehthumbs.db
 Thumbs.db
+data-service/src/main/resources/application.properties
