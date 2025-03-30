@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Define console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Define file appender -->
+    <appender name="FILE-MSG" class="ch.qos.logback.core.FileAppender">
+        <file>msg-logs/msg-log-data-service.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger configuration for specific service -->
+    <logger name="msg-data-service" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE-MSG"/>
+    </logger>
+
+    <!-- Root logger configuration to write logs to console and file -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="FILE-MSG"/>-->
+    </root>
+</configuration>

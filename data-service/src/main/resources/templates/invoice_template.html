@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #00858a;
+            padding: 15px;
+            text-align: center;
+        }
+        .header img {
+            width: 80px;
+            height: auto;
+        }
+        .content {
+            padding: 10px 15px;
+        }
+        .footer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        table th, table td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        .total-row td {
+            font-weight: bold;
+        }
+        .summary {
+            font-size: 12px;
+        }
+        @media (max-width: 600px) {
+            .email-container {
+                width: 100%;
+                padding: 10px;
+            }
+            .content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <!-- Header -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+           style="max-width: 700px; margin: 0 auto; background-color: #00858a; border-radius: 0 0 25px 25px; overflow: hidden;"
+           bgcolor="#00858a">
+        <tr>
+            <!-- Logo Section -->
+            <td style="width: 100px; background-color: #005554; padding: 20px 0; text-align: center;" width="100"
+                bgcolor="#00858a" align="center">
+                <a href="https://www.wineworld.lk">
+                    <img src="https://res.cloudinary.com/dldtrjalo/image/upload/v1736328470/fzngaiggj5dbfjtpo9vv.png"
+                         alt="Wine World Logo" style="width: 90px; height: auto; display: block; margin: 0 auto;" />
+                </a>
+            </td>
+            <!-- Text Section -->
+            <td style="text-align: center; padding: 20px; color: #ffffff; font-size: 20px; font-weight: 600; font-family: sans-serif; vertical-align: middle;"
+                align="center" valign="middle">
+                Invoice
+            </td>
+        </tr>
+    </table>
+
+    <!-- Content -->
+    <div class="content">
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td style="width: 70%; border: none; vertical-align: top;">
+                    <h2 style="font-size: 16px;">Invoice Details</h2>
+                    <p style="font-size: 12px;">Dear <span th:text="${customerName}">Customer Name</span>,</p>
+                    <p style="font-size: 12px;">Thank you for your purchase! Below is the summary of your order:</p>
+                </td>
+                <td style="width: 30%; border: none; text-align: right;">
+                    <img th:src="'data:image/png;base64,' + ${qrCode}" alt="QR Code" style="width: 100px; height: 100px;"/>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Invoice Details -->
+        <table>
+            <tr>
+                <th>Order Reference</th>
+                <td th:text="${orderReference}">REF-001234</td>
+            </tr>
+            <tr>
+                <th>Order Date</th>
+                <td th:text="${orderDate}">01/01/2025</td>
+            </tr>
+            <tr>
+                <th>Delivery Date</th>
+                <td th:text="${deliveryDate}">01/05/2025</td>
+            </tr>
+            <tr>
+                <th>Delivery Option</th>
+                <td th:text="${deliveryOption}">STORE PICKUP</td>
+            </tr>
+            <tr>
+                <th>Invoice Date</th>
+                <td th:text="${#dates.format(#dates.createNow(), 'MM/dd/yyyy')}">01/09/2025</td>
+            </tr>
+            <tr>
+                <th>Customer Name</th>
+                <td th:text="${customerName}">John Doe</td>
+            </tr>
+            <tr>
+                <th>Billing Address</th>
+                <td th:text="${billingAddress}">123 Main St, Colombo</td>
+            </tr>
+            <tr>
+                <th>Shipping Address</th>
+                <td th:text="${shippingAddress}">456 Wine Lane, Kandy</td>
+            </tr>
+            <tr>
+                <th>Contact Number</th>
+                <td th:text="${userPhoneNumber}">+94 123 456 789</td>
+            </tr>
+            <tr>
+                <th>Customer Email</th>
+                <td th:text="${userEmail1}">johndoe@example.com</td>
+            </tr>
+        </table>
+
+        <!-- Gift Section -->
+        <div th:if="${isGift}">
+            <h3 style="font-size: 14px;">Gift Details</h3>
+            <table>
+                <tr>
+                    <th>Giftee Name</th>
+                    <td th:text="${gifteeName}">Jane Smith</td>
+                </tr>
+                <tr>
+                    <th>Giftee Contact Number</th>
+                    <td th:text="${gifteeContactNumber}">+94 987 654 321</td>
+                </tr>
+                <tr>
+                    <th>Gifter Name</th>
+                    <td th:text="${gifterName}">John Doe</td>
+                </tr>
+                <tr>
+                    <th>Gifter Message</th>
+                    <td th:text="${gifterMessage}">Happy Birthday!</td>
+                </tr>
+            </table>
+        </div>
+
+        <div th:if="${orderNote}">
+            <h3 style="font-size: 14px;">Order Note</h3>
+            <table>
+                <tr>
+                    <td th:text="${orderNote}">asdsadsa dasdasdas asdadsasd</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Order Items -->
+        <h3 style="font-size: 14px;">Order Items</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Item Number</th>
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>
+                    <span th:if="${currency == 'LKR'}" th:text="'Unit Price'">Unit Price</span>
+                    <span th:if="${currency == 'USD'}" th:text="'Unit Price'">Unit Price</span>
+                </th>
+                <th>
+                    <span th:if="${currency == 'LKR'}" th:text="'Subtotal'">Subtotal</span>
+                    <span th:if="${currency == 'USD'}" th:text="'Subtotal'">Subtotal</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item, iterStat : ${orderItems}">
+                <!-- Item Number -->
+                <td th:text="${iterStat.index + 1}">1</td>
+
+                <!-- Product Image -->
+                <td>
+                    <img th:src="${item.imageUrl}" alt="Product Image" style="width: 50px; height: auto; vertical-align: middle;" />
+                </td>
+
+                <!-- Product Name -->
+                <td th:text="${item.productName}">Red Wine</td>
+
+                <!-- Quantity -->
+                <td th:text="${item.quantity != null ? item.quantity : 'N/A'}">19</td>
+
+                <!-- Unit Price -->
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${item.unitPriceInRupee}">LKR 5,000</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${item.unitPriceInDollar}">USD 15</span>
+                </td>
+
+                <!-- Subtotal -->
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${item.totalPriceInRupee}">LKR 10,000</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${item.totalPriceInDollar}">USD 30</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <!-- Add-ons Details -->
+        <div th:if="${orderAddons != null and !#lists.isEmpty(orderAddons)}">
+            <h3 style="font-size: 14px;">Order Add-ons</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Add-on</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="addon : ${orderAddons}">
+                    <td th:text="${addon.addonName}">Gift Wrap</td>
+                    <td th:text="${addon.quantity}">1</td>
+                    <td>
+                        <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${addon.totalPriceInRupee}">LKR 500</span>
+                        <span th:if="${currency == 'USD'}" th:text="'USD ' + ${addon.totalPriceInDollar}">USD 2</span>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total Summary -->
+        <h3 style="font-size: 14px;">Payment Summary</h3>
+        <table>
+            <tr class="total-row">
+                <th>Payment Method</th>
+                <td>
+                    <span>PayHere</span>
+                </td>
+            </tr>
+            <tr class="total-row">
+                <th>Payment Details</th>
+                <td>
+                    <span th:text="${cardNumber}">cardNumber</span>
+                </td>
+            </tr>
+            <tr class="total-row">
+                <th></th>
+                <td>
+                    <span></span>
+                </td>
+            </tr>
+            <tr th:if="${addonSubTotal != null}">
+                <th>Add-on Subtotal</th>
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${addonSubTotal}">LKR 500</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${addonSubTotalUSD}">USD 2</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Order Items Subtotal</th>
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${orderItemsSubtotal}">LKR 500</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${orderItemsSubtotalUSD}">USD 2</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Delivery Fee</th>
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${deliveryFee}">LKR 1,000</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${deliveryFeeUSD}">USD 5</span>
+                </td>
+            </tr>
+            <tr class="total-row">
+                <th>Total Amount</th>
+                <td>
+                    <span th:if="${currency == 'LKR'}" th:text="'LKR ' + ${totalOrderAmount}">LKR 16,500</span>
+                    <span th:if="${currency == 'USD'}" th:text="'USD ' + ${totalOrderAmountUSD}">USD 50</span>
+                </td>
+            </tr>
+
+        </table>
+
+
+        <p style="font-size: 14px; font-family: Arial, sans-serif; color: #333;">
+            If you have any questions about your invoice, please contact us at
+            <a href="mailto:wwinfo@wineworld.lk" style="color: #00858a; text-decoration: none;">wwinfo@wineworld.lk</a>
+            or call us at <a href="tel:+94777004600" style="color: #00858a; text-decoration: none;">+94777 004 600</a>.
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Wine World. All rights reserved.</p>
+        <p>123 Wine Street, Colombo, Sri Lanka</p>
+    </div>
+</div>
+</body>
+</html>

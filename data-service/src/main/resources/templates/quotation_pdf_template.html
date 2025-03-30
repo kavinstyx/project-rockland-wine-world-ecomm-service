@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wine World</title>
+  <style>
+    .background-image {
+      background-image: url('https://webdesigner50.com/email-bg.png');
+      background-size: cover;
+      background-position: top center;
+      width: auto;
+      height: auto;
+      border-radius: 25px 25px 0 0;
+    }
+    /* Additional styling for tables and containers */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .company-details, .customer-details, .note-section {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .note-section {
+      margin-top: 20px;
+      border-top: 1px solid #ddd;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body style="font-family: sans-serif; background-color: rgb(245, 245, 245); margin: 50px auto;">
+
+<div style="max-width: 700px; min-width: 500px; margin: auto; padding: 10px; background-color: #ffffff; border: solid 1px #e5e5e5;">
+
+  <!-- Header Section -->
+  <table align="center" bgcolor="#00858a" style="border-radius: 0 0 25px 25px;">
+    <tr>
+      <td style="width: 100px; background-color: #005554; padding: 20px 0; text-align: center;">
+        <a href="https://www.wineworld.lk">
+          <img src="https://res.cloudinary.com/dldtrjalo/image/upload/v1736328470/fzngaiggj5dbfjtpo9vv.png" alt="Wine World Logo" style="width: 90px; height: auto;" />
+        </a>
+      </td>
+      <td style="text-align: center; padding: 20px; color: #ffffff; font-size: 20px; font-weight: 600;">
+        Quotation
+      </td>
+    </tr>
+  </table>
+
+  <!-- Company and Quotation Details Section -->
+  <div class="company-details">
+    <table>
+      <tr>
+        <td>
+          <strong>Wine World (Pvt) Ltd</strong><br />
+          102, Kumar Ratnam Road, Col - 02<br />
+          <a href="https://www.wineworld.lk" style="color: #00858a; text-decoration: none;">www.wineworld.lk</a><br />
+          Customer Hotline: 011 2 431 991
+        </td>
+        <td style="text-align: right;">
+          <strong>Date:</strong> <span th:text="${quotationDate}">01/01/2025</span><br />
+          <strong>Quotation No:</strong> <span th:text="${quotationNo}">#001234</span><br />
+          <strong>Customer ID:</strong> <span th:text="${customerId}">CUST001</span><br />
+          <strong>Customer Name:</strong> <span th:text="${customerName}">John Doe</span><br />
+          <strong>Customer Email:</strong> <span th:text="${userEmail}">john.doe@example.com</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Customer Details Section -->
+  <div class="customer-details" style="display: flex; justify-content: space-between;">
+    <div>
+      <strong>Billing Address:</strong><br />
+      <span th:text="${billingAddress}">123 Main St, Colombo</span><br />
+    </div>
+    <div style="text-align: right;">
+      <strong>Prepared By:</strong><br />
+      Wine World Team
+    </div>
+  </div>
+
+  <!-- Order Table Section -->
+  <div style="padding: 20px;">
+    <table>
+      <thead>
+      <tr>
+        <th>Item</th>
+        <th>Pack Size</th>
+        <th>Unit Price (LKR)</th>
+        <th>Order Qty</th>
+        <th>Total (LKR)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${orderItems}">
+        <td th:text="${item.productName}">Red Wine</td>
+        <td style="text-align: center" th:text="${item.volume != null ? (item.volume.multiply(1000)).intValue() + 'ml' : ''}"></td>
+        <td style="text-align: center" th:text="${item.discountedPrice}">LKR 5,000</td>
+        <td style="text-align: center" th:text="${item.quantity}">2</td>
+        <td style="text-align: center" th:text="${item.discountedPrice * item.quantity}">LKR 10,000</td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr class="summary-row">
+        <td colspan="4">Net Total</td>
+        <td style="text-align: center" th:text="${totalQuotationAmount}">LKR 10,000</td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- Note Section -->
+  <div th:if="${paymentMethod == 'CARD'}">
+    <!-- CARD Note Section -->
+    <div class="note-section" style="margin-top: 20px; padding: 20px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; text-align: left; border-top: 1px solid #ddd;">
+      <p style="margin: 0; font-weight: bold;">Note: Please make all remittances payable to <strong>Wine World (Pvt) Ltd</strong></p>
+      <p style="margin: 5px 0;">DFCC Bank - Maharagama</p>
+      <p style="margin: 5px 0;">Acc No: 016001005930</p>
+      <p style="margin: 10px 0 0 0; font-weight: bold; text-align: center">Thank You!</p>
+    </div>
+  </div>
+
+  <div th:if="${paymentMethod == 'CASH'}">
+    <!-- CASH Note Section -->
+    <div class="note-section" style="margin-top: 20px; padding: 20px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; text-align: left; border-top: 1px solid #ddd;">
+      <p style="margin: 0; font-weight: bold;">Note: For <strong>CASH</strong> payments, please ensure the exact amount is ready at the time of delivery.</p>
+      <!--                <p style="margin: 5px 0;">No change will be provided by the delivery personnel.</p>-->
+      <!--                <p style="margin: 5px 0;">All cash payments are acknowledged with a receipt upon delivery.</p>-->
+      <p style="margin: 10px 0 0 0; font-weight: bold; text-align: center">Thank You!</p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

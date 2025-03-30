@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine World</title>
+    <style>
+        .background-image {
+            background-image: url('https://webdesigner50.com/email-bg.png'); /* Replace 'test.jpg' with your image path */
+            background-size: cover;
+            background-position: top center;
+            width:auto;
+            height: auto; /* Adjust height as needed */
+            border-radius: 25px 25px 0 0;
+        }
+    </style>
+
+
+</head>
+<body style="font-family: sans-serif;
+      background-color: rgb(245, 245, 245);
+      margin: 50px auto;">
+<div style="max-width: 700px;
+         min-width: 500px;
+         margin: auto;
+         width: 50%;
+         padding: 10px;
+         background-color: #ffffff;
+         border-color: #e5e5e5;
+         border-style: solid;
+         border-width: 0 1px 1px 1px;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+           style="max-width: 700px; margin: 0 auto; background-color: #00858a; border-radius: 0 0 25px 25px; overflow: hidden;"
+           bgcolor="#00858a">
+        <tr>
+            <!-- Logo Section -->
+            <td style="width: 100px; background-color: #005554; padding: 20px 0; text-align: center;" width="100"
+                bgcolor="#00858a" align="center">
+                <a href="https://www.wineworld.lk">
+                    <img src="https://res.cloudinary.com/dldtrjalo/image/upload/v1736328470/fzngaiggj5dbfjtpo9vv.png"
+                         alt="Wine World Logo" style="width: 90px; height: auto; display: block; margin: 0 auto;">
+                </a>
+            </td>
+            <!-- Text Section -->
+            <td style="text-align: center; padding: 20px; color: #ffffff; font-size: 20px; font-weight: 600; font-family: sans-serif; vertical-align: middle;" align="center" valign="middle">
+                Gift order #<span th:text="${orderReference}"></span>
+            </td>
+        </tr>
+    </table>
+    <!-- Order Details Section -->
+    <table style="background-color: #fff; padding: 20px 20px; width: 100%; border-collapse: collapse; margin-bottom: 20px;" width="100%" bgcolor="#fff">
+        <tr>
+
+            <td style="padding: 20px; text-align: left; font-size: 14px;" align="left">
+
+                <p style="color: #00858a; font-family: 'Open Sans',Helvetica,Arial,sans-serif; font-size: 16px; font-weight: 700; font-style: normal; letter-spacing: normal; line-height: 22px;">
+                    Gift order #<span th:text="${orderReference}"></span>
+                    (Order place date - <span th:text="${orderDate}"></span>)
+                </p>
+                                <p style="color: #070707; font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; font-style: normal; letter-spacing: normal; line-height: 22px;">
+                    <span th:text="${deliveryOption == 'DELIVERY' ? 'Delivery' : (deliveryOption == 'STORE_PICKUP' ? 'Store Pickup' : deliveryOption)}"></span>
+                    <span th:if="${deliveryDate != null}">
+                        (<span th:text="${deliveryDate}"></span>)
+                    </span>
+                                    <span th:if="${deliveryDate == null}">
+                        (1-2 DAYS)
+                    </span>
+                </p>
+                <table border="1" cellpadding="10" cellspacing="0" width="100%" style="border-collapse: collapse; border: 1px solid #00858a; font-size: 14px;">
+                    <thead>
+                    <tr style="background-color: #e4eded; color: #333;">
+                        <th align="left" style="border: 1px solid #00858a; padding: 10px;">Product</th>
+                        <th align="center" style="border: 1px solid #00858a; padding: 10px;">Quantity</th>
+                        <th align="left" style="border: 1px solid #00858a; padding: 10px;">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="item : ${orderItems}">
+                    <tr>
+                        <td style="border: 1px solid #00858a; padding: 10px;" th:text="${item.productName}">Product Name</td>
+                        <td align="center" style="border: 1px solid #00858a; padding: 10px;" th:text="${item.quantity}">Quantity</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;" th:text="|${currency} ${item.totalPrice}|">Price</td>
+                    </tr>
+                    </tbody>
+
+                    <!-- addon section-->
+                    <tbody th:if="${orderAddons != null && !orderAddons.isEmpty()}" th:each="addon : ${orderAddons}">
+                    <tr>
+                        <td style="border: 1px solid #00858a; padding: 10px;" th:text="${addon.addonName} + ' (Addon)'">Addon Name</td>
+                        <td align="center" style="border: 1px solid #00858a; padding: 10px;" th:text="${addon.quantity}">Quantity</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;" th:text="|${currency} ${addon.totalPrice}|">Price</td>
+                    </tr>
+                    </tbody>
+
+                    <tfoot>
+
+                    <tr>
+                        <td colspan="2" align="left" style="border: 1px solid #00858a; padding: 10px;">Product Subtotal:</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;"><span th:text="${currency}"></span> <span th:text="${subTotal}"></span></td>
+                    </tr>
+
+                    <!-- Addons Subtotal -->
+                    <tr th:if="${addonSubTotal != null && addonSubTotal > 0}">
+                        <td colspan="2" align="left" style="border: 1px solid #00858a; padding: 10px;">Addons  Subtotal:</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;"><span th:text="${currency}"></span> <span th:text="${addonSubTotal}"></span></td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="left" style="border: 1px solid #00858a; padding: 10px;">Shipping:</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;"><span th:text="${currency}"></span> <span th:text="${deliveryFee}"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="left" style="border: 1px solid #00858a; padding: 10px;">Payment Method</td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px;">
+                                <span th:text="${method != null ? method : 'PayHere'}">PayHere</span>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="left" style="border: 1px solid #00858a; padding: 10px; font-weight: bold;">
+                            Total:
+                        </td>
+                        <td align="left" style="border: 1px solid #00858a; padding: 10px; font-weight: bold;">
+                            <strong><span th:text="${currency}"></span> <span th:text="${totalOrderamount}"></span></strong>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+    <table style="padding: 20px 20px; font-size: 14px; color: #333; width: 100%; border-collapse: collapse; margin-bottom: 20px;" width="100%">
+        <tr>
+            <!-- Billing Address -->
+            <td style="padding: 20px; text-align: left; font-size: 14px;" align="left">
+                <h4 style="color: #00858a; margin: 0 0 10px;">Billing address</h4>
+                <div style>
+                    <p style="margin: 0;"><span th:text="${customerName}"></span></p>
+                    <p style="margin: 0;"><span th:text="${billingAddress}"></span></p>
+                    <!--                    <p style="margin: 0;">221B Baker Street</p>-->
+                    <!--                    <p style="margin: 0;">London</p>-->
+                    <!--                    <p style="margin: 0;">NW1 6XE</p>-->
+                    <!--                    <p style="margin: 0;">United Kingdom (UK)</p>-->
+                    <p style="margin: 10px 0 0; color: #00858a;"><span th:text="${userPhoneNumber}"></span></p>
+                    <p style="margin: 10px 0 0;">
+                        <a th:href="${userEmail}" style="color: #00858a; text-decoration: none;"></a>
+                    </p>
+                </div>
+            </td>
+            <!-- Shipping Address -->
+            <td style="padding: 20px; text-align: right; font-size: 14px;" align="right">
+                <h4 style="color: #00858a; margin: 0 0 10px;">Shipping address</h4>
+                <div style>
+                    <p style="margin: 0;">
+                        <span th:if="${gifteeName != null && !#strings.isEmpty(gifteeName)}" th:text="${gifteeName}"></span>
+                        <span th:if="${gifteeName == null || #strings.isEmpty(gifteeName)}" th:text="${customerName}"></span>
+
+                    </p>
+                    <p style="margin: 0;"><span th:text="${shippingAddress}"></span></p>
+                    <!--                    <p style="margin: 0;">221B Baker Street</p>-->
+                    <!--                    <p style="margin: 0;">London</p>-->
+                    <!--                    <p style="margin: 0;">NW1 6XE</p>-->
+                    <!--                    <p style="margin: 0;">United Kingdom (UK)</p>-->
+                    <p style="margin: 10px 0 0; color: #00858a;">
+                        <span th:if="${gifteePhoneNumber != null && !#strings.isEmpty(gifteePhoneNumber)}" th:text="${gifteePhoneNumber}"></span>
+                        <span th:if="${gifteePhoneNumber == null || #strings.isEmpty(gifteePhoneNumber)}" th:text="${userPhoneNumber}"></span>
+                    </p>
+                    <p style="margin: 10px 0 0;">
+                        <a th:href="${userEmail}" style="color: #00858a; text-decoration: none;"></a>
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <!-- gift from -->
+                <td style="width: 50%; padding: 20px; text-align: left; font-size: 14px;" align="left" valign="top">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Who's this gift from?</label>
+                    <div style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <span th:text="${gifterName}" style="display: inline-block; color: #333;"></span>
+                    </div>
+                </td>
+                <!-- gift for -->
+                <td style="width: 50%; padding: 20px; text-align: left; font-size: 14px;" align="left" valign="top">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Who's this gift for?</label>
+                    <div style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <span th:text="${gifteeName}" style="display: inline-block; color: #333;"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <!-- recipient phone number -->
+                <td style="width: 50%; padding: 20px; text-align: left; font-size: 14px; height: 120px;" align="left" valign="top">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Recipient phone number</label>
+                    <div style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <span th:text="${gifteePhoneNumber}" style="display: inline-block; color: #333;"></span>
+                    </div>
+                </td>
+                <!-- message -->
+                <td style="width: 50%; padding: 20px; text-align: left; font-size: 14px; height: 120px;" align="left" valign="top">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Message</label>
+                    <div style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden;">
+                        <span th:text="${gifteeMessage}" style="display: inline-block; color: #333; white-space: pre-wrap;"></span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+    </table>
+    <!--green background starts here  -->
+    <div class="background-image ">
+        <table style="padding: 30px 40px; font-size: 12px; color: #333; width: 100%;  border-radius: 25px 25px 0 0; overflow: hidden;" width="100%" >
+            <tr>
+                <table style="padding: 0px 60px; font-size: 12px; color: #333; width: 100%; overflow: hidden;" width="90%" >
+                    <tr style="height: 50px;">
+                        <!-- Left Column
+                        <td style="width: 33%;" width="33%"></td>-->
+                        <!-- Center Column with Social Media Icons -->
+                        <td style="text-align: center; width: 33%; color: #ffffff;" width="60%" align="center">
+                            <a href="https://facebook.com" target="_blank" style="margin-right: 60px;"> <!-- Increased right margin -->
+                                <img src="https://img.icons8.com/?size=100&id=435&format=png&color=FFFFFF" alt="Facebook" style="width: 30px; height: 30px;">
+                            </a>
+                            <a href="https://instagram.com" target="_blank" style="margin-left: 60px;"> <!-- Added left margin -->
+                                <img src="https://img.icons8.com/?size=100&id=32292&format=png&color=FFFFFF" alt="Instagram" style="width: 30px; height: 30px;">
+                            </a>
+                            <hr style="border-bottom: 1px solid #fff;">
+                        </td>
+                        <!-- Right Column
+                        <td style="width: 33%;" width="33%"></td>-->
+                    </tr>
+                </table>
+            </tr>
+            <tr>
+                <table style="padding: 0px 40px; font-size: 12px; color: #333; width: 100%;  overflow: hidden;" width="100%" >
+                    <!-- Tag Us Today Section -->
+                    <tr style=" color: #ffffff; text-align: center;">
+                        <td colspan="3" style="padding: 20px;">
+                            <h1 style="margin: 0; font-size: 20px; font-weight: bold;">Tag us today!</h1>
+                            <p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">
+                                We love seeing our customers enjoy their favorite drinks!<br>
+                                Share your special moments with us on social media using the hashtag:
+                            </p>
+                            <p style="margin: 0; font-size: 16px; font-weight: bold;">#SipwithWineWorld</p>
+                        </td>
+                    </tr>
+                </table>
+            </tr>
+            <tr>
+                <table style="font-size: 12px; color: #333; width: 100%;  overflow: hidden; margin-top: -20px" width="100%" >
+                    <!-- Row with Three Columns -->
+                    <tr>
+                        <!-- Left Column with Bottle Image -->
+                        <td style="text-align: right; width: 40%; padding: 10px;" width="20%" align="left">
+                            <img src="https://res.cloudinary.com/dldtrjalo/image/upload/v1732210688/gfvk8sjmwp3pw9v97jjm.jpg" alt="Bottle Image Left" style="width: 150px; height: auto;">
+                        </td>
+                        <!-- Center Column with "WINE WORLD" Text -->
+                        <td style="text-align: center; padding: 10px; color: #ffffff; font-size: 16px;" align="center">
+                            <a href="https://www.wineworld.lk" style="text-decoration: none">
+                                <p style="margin: 0; text-align: center; font-size: 14px; font-weight: 600; font-family: sans-serif; color: #fff;">
+                                    www.wineworld.lk
+                                </p> <br />
+                                <p style="margin: 0; text-align: center; font-size: 14px; font-weight: 600; font-family: sans-serif; color: #fff;">
+                                    HOT LINE: +94777004600
+                                </p> <br />
+                            </a>
+                        </td>
+
+                        <!-- Right Column with Bottle Image -->
+                        <td style="text-align: left; width: 40%; padding: 10px;" width="20%" align="right">
+                            <img src="https://res.cloudinary.com/dldtrjalo/image/upload/v1732210688/kazlikxfiaaofg7punuw.jpg" alt="Bottle Image Right" style="width: 150px; height: auto;">
+                        </td>
+                    </tr>
+                </table>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
