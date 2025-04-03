@@ -1,0 +1,31 @@
+trigger: 
+  - master  # Runs when changes are pushed to the master branch
+
+resources:
+  - repo: self
+
+pool:
+  name: Default
+  demands:
+    - Agent.Name -equals QALinuxAzureAgent
+
+stages:
+- stage: SyncRepo
+  displayName: Sync GitHub to Azure DevOps
+  jobs:
+  - job: SyncJob
+    displayName: Sync Job
+    steps:
+    - checkout: self  # Pulls code from GitHub (via service connection)
+    
+    - script: |
+        git config --global user.email "gihankavindaaaa@gmail.com"
+        git config --global user.name "Gihan"
+        
+        # Clone the GitHub repo
+        git clone --bare https://github.com/kavinstyx/project-rockland-wine-world-ecomm-service.git temp-repo
+        cd temp-repo
+        
+        # Push to Azure DevOps
+        git push --mirror git@ssh.dev.azure.com:v3/gihankavindaaaa/Wine_Latest/Wine_Latest
+      displayName: "Sync GitHub to Azure DevOps"
